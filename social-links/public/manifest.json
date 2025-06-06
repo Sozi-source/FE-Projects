@@ -2,7 +2,7 @@
   "name": "Social Media Links",
   "short_name": "Links",
   "start_url": ".",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#0d0d0d",
   "icons": [
