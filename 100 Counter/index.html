@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+
+
+<body class="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
+    
+<div class="flex flex-wrap w-[1200px] gap-6 items-center justify-center border-4 border-green-500"></div>
+
+<button id="animateBtn" class="bg-black py-3 px-4 text-white rounded-md mt-5"><strong>Count</strong></button>
+
+<script>
+const container = document.querySelector('.flex.flex-wrap.w-\\[1200px\\].gap-6.items-center.justify-center');
+
+const cards =[];
+
+for (let i = 0; i < 100; i++) {
+    const Card = document.createElement('div');
+    Card.className = 'w-10 h-8 bg-fuchsia-400 text-2xl text-black p-5 flex items-center justify-center opacity-0 translate-y-10 transition-all duration-300';
+    Card.textContent = i + 1; 
+    container.appendChild(Card);
+    cards.push(Card);
+
+}
+
+    // animation
+    const btn = document.getElementById('animateBtn');
+    btn.addEventListener('click', () => {
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.remove('opacity-0', 'translate-y-10');
+                card.classList.add('opacity-100', 'translate-y-0');
+            }, index * 600); // Delay each card's animation by 100ms
+        });
+
+});
+</script>
+</body>
+
+
+</html>
+
