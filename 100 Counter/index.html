@@ -74,6 +74,12 @@ for (let i = 0; i < 100; i++) {
     cards.push(Card);
 }
 
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    speechSynthesis.speak(utterance);
+}
+
 // buttons and selectors
 const animateBtn = document.getElementById('animateBtn');
 const speedSelector = document.getElementById('speed');
@@ -104,7 +110,7 @@ rangeSelector.addEventListener('change', () => {
 });
 
 // animate logic
-animateBtn.addEventListener('click', () => {
+    animateBtn.addEventListener('click', () => {
     const selectedSpeed = speedSelector.value;
     const delay = speedDelay[selectedSpeed] || 600;
 
@@ -115,18 +121,9 @@ animateBtn.addEventListener('click', () => {
         return number >= start && number <= end;
     });
 
-    visibleCards.forEach((card, index) => {
-        setTimeout(() => {
-            visibleCards.forEach(c => {
-                c.classList.add('dimmed');
-                c.classList.remove('highlight');
-            });
-
-            card.classList.remove('opacity-0', 'scale-50', 'dimmed');
-            card.classList.add('opacity-100', 'scale-100', 'highlight');
-        }, index * delay);
-    });
+    animateCounting(visibleCards, delay);
 });
+
 
 // reset logic
 resetBtn.addEventListener('click', () => {
@@ -135,6 +132,40 @@ resetBtn.addEventListener('click', () => {
         card.classList.remove('opacity-100', 'scale-100', 'highlight');
     });
 });
+
+async function animateCounting(visibleCards, delay) {
+    for (const card of visibleCards) {
+        // dim all cards
+        visibleCards.forEach(c => {
+            c.classList.add('dimmed');
+            c.classList.remove('highlight');
+        });
+
+        // highlight current card
+        card.classList.remove('opacity-0', 'scale-50', 'dimmed');
+        card.classList.add('opacity-100', 'scale-100', 'highlight');
+
+        // speak and wait
+        await speakAndWait(card.textContent);
+        await wait(delay);
+    }
+}
+
+function speakAndWait(text) {
+    return new Promise(resolve => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.pitch = 1;
+        utterance.rate = 1;
+        utterance.onend = resolve;
+        speechSynthesis.speak(utterance);
+    });
+}
+
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 // Initialize to first range
 rangeSelector.dispatchEvent(new Event('change'));
